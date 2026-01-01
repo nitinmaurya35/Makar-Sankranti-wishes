@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makar Sankranti Greeting - Kites Special</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #1e90ff, #87ceeb, #fdbb2d);
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            color: #333;
+            overflow: hidden; /* Screen ke bahar kites ko control karne ke liye */
+            height: 100vh;
+        }
+
+        /* Kite Animation Layer */
+        .kite-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .kite {
+            position: absolute;
+            font-size: 40px;
+            animation: fly linear infinite;
+            filter: drop-shadow(2px 4px 5px rgba(0,0,0,0.2));
+        }
+
+        @keyframes fly {
+            0% { transform: translateY(110vh) translateX(0) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(50vh) translateX(50px) rotate(20deg); }
+            100% { transform: translateY(-20vh) translateX(-50px) rotate(-20deg); opacity: 0; }
+        }
+
+        /* Content Styling */
+        .main-card {
+            position: relative;
+            z-index: 10;
+            max-width: 400px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 4px solid #ff6600;
+        }
+
+        .sender-box {
+            background: #ff6600;
+            color: white;
+            display: inline-block;
+            padding: 5px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 22px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(255, 102, 0, 0.4);
+        }
+
+        h1 {
+            color: #d35400;
+            font-size: 32px;
+            margin: 10px 0;
+            text-shadow: 1px 1px 0px #fff;
+        }
+
+        .input-group {
+            margin-top: 30px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 15px;
+            border: 2px solid #ff6600;
+            border-radius: 50px;
+            font-size: 18px;
+            outline: none;
+            text-align: center;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-whatsapp:active { transform: scale(0.95); }
+
+        #share-area {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 20px;
+        }
+
+        .multi-share {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="kite-container" id="kiteBox"></div>
+
+    <div class="main-card">
+        <div style="font-size: 50px;">?</div>
+        <div class="sender-box" id="display-name">Dost</div>
+        <p style="font-size: 18px; margin: 5px 0;">ki taraf se aapko</p>
+        
+        <h1>Happy Makar Sankranti!</h1>
+        
+        <p style="color: #666; font-style: italic;">"Patang ki tarah aapka naseeb bhi bulandiyon par ho!"</p>
+
+        <div class="input-group">
+            <input type="text" id="userName" placeholder="Yahan Apna Naam Likhein">
+            
+            <button class="btn-whatsapp" onclick="generateWish()">
+                <i class="fab fa-whatsapp" style="font-size: 25px;"></i>
+                Link Banayein aur WhatsApp Karein
+            </button>
+        </div>
+
+        <div id="share-area">
+            <p style="font-size: 14px; font-weight: bold;">Aapka link taiyar hai! Sabhi doston ko bhejein:</p>
+            <button class="multi-share" onclick="systemShare()">
+                <i class="fas fa-share-nodes"></i> Dusre Apps par Share Karein
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 1. URL Se Naam Display Karna
+        const urlParams = new URLSearchParams(window.location.search);
+        const sender = urlParams.get('name');
+        if (sender) {
+            document.getElementById('display-name').innerText = decodeURIComponent(sender);
+        }
+
+        // 2. 3x Kites Generation Logic
+        const kiteBox = document.getElementById('kiteBox');
+        const kiteEmojis = ['?', '?', '?', '?'];
+        const colors = ['#FF5733', '#FFC300', '#DAF7A6', '#C70039', '#900C3F'];
+
+        function createKite() {
+            const kite = document.createElement('div');
+            kite.className = 'kite';
+            kite.innerText = kiteEmojis[Math.floor(Math.random() * kiteEmojis.length)];
+            
+            // Random Positions aur Speed
+            kite.style.left = Math.random() * 100 + "vw";
+            const duration = 5 + Math.random() * 5; // 5 to 10 seconds
+            kite.style.animationDuration = duration + "s";
+            kite.style.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            kiteBox.appendChild(kite);
+
+            // Animation khatam hone par remove karein
+            setTimeout(() => { kite.remove(); }, duration * 1000);
+        }
+
+        // 3 Guna Zyada Patangein (Har 300ms mein ek nayi patang)
+        setInterval(createKite, 350);
+
+        let finalLink = "";
+
+        // 3. Link Generation & Social Share
+        function generateWish() {
+            const nameInput = document.getElementById('userName').value;
+            if (nameInput.trim() === "") {
+                alert("Kripya apna naam likhein!");
+                return;
+            }
+
+            const currentPath = window.location.origin + window.location.pathname;
+            finalLink = currentPath + "?name=" + encodeURIComponent(nameInput);
+            
+            document.getElementById('share-area').style.display = 'block';
+
+            // WhatsApp Share
+            const text = "? *Makar Sankranti* ki dheron shubhkamnaye! Maine aapke liye ek special surprise bheja hai, dekhne ke liye yahan click karein: \n" + finalLink;
+            window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(text), '_blank');
+        }
+
+        function systemShare() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Happy Makar Sankranti',
+                    url: finalLink
+                });
+            } else {
+                alert("Link Copy Karein: " + finalLink);
+            }
+        }
+    </script>
+</body>
+</html>
