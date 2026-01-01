@@ -134,7 +134,7 @@
     <div class="kite-container" id="kiteBox"></div>
 
     <div class="main-card">
-        <div style="font-size: 50px;">?</div>
+        <div style="font-size: 50px;">🪁</div>
         <div class="sender-box" id="display-name">Dost</div>
         <p style="font-size: 18px; margin: 5px 0;">ki taraf se aapko</p>
         
@@ -169,7 +169,7 @@
 
         // 2. 3x Kites Generation Logic
         const kiteBox = document.getElementById('kiteBox');
-        const kiteEmojis = ['?', '?', '?', '?'];
+        const kiteEmojis = ['🪁', '🪁', '🪁', '🪁'];
         const colors = ['#FF5733', '#FFC300', '#DAF7A6', '#C70039', '#900C3F'];
 
         function createKite() {
@@ -208,7 +208,7 @@
             document.getElementById('share-area').style.display = 'block';
 
             // WhatsApp Share
-            const text = "? *Makar Sankranti* ki dheron shubhkamnaye! Maine aapke liye ek special surprise bheja hai, dekhne ke liye yahan click karein: \n" + finalLink;
+            const text = "🪁 *Makar Sankranti* ki dheron shubhkamnaye! Maine aapke liye ek special surprise bheja hai, dekhne ke liye yahan click karein: \n" + finalLink;
             window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(text), '_blank');
         }
 
